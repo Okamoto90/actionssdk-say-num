@@ -25,7 +25,8 @@
     ]
   },
   "dependencies": {
-    "actions-on-google": "^1.0.0"
+    "actions-on-google": "^1.0.0",
+    "debug": "^2.6.8"
   },
   "devDependencies": {
     "semistandard": "^9.1.0"
