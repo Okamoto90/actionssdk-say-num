@@ -35,8 +35,6 @@ restService.post('/echo', function (req, res) {
         ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
     app.ask(inputPrompt);
     let actionMap = new Map();
-    actionMap.set(app.StandardIntents.MAIN, mainIntent);
-    actionMap.set(app.StandardIntents.TEXT, rawInput);
-
+    actionMap.set(app);
     app.handleRequest(actionMap);
 });
