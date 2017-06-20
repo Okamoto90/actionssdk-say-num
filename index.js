@@ -15,39 +15,28 @@
 'use strict';
 
 process.env.DEBUG = 'actions-on-google:*';
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
-function sayNumber(app) {
-app.post('/sayNumber', function (request, response){
-    console.log('sayNumber function');
-    const app = new ActionsSdkApp({request, response});
+const restService = express();
 
-    function mainIntent (app) {
-        console.log('mainIntent');
-        let inputPrompt = app.buildInputPrompt(true, '<speak>Hi! <break time="1"/> ' +
-            'I can read out an ordinal like ' +
-            '<say-as interpret-as="ordinal">123</say-as>. Say a number.</speak>',
-            ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
-        app.ask(inputPrompt);
-    }
+restService.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-    function rawInput (app) {
-        console.log('rawInput');
-        if (app.getRawInput() === 'bye') {
-            app.tell('Goodbye!');
-        } else {
-            let inputPrompt = app.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">'
-                + app.getRawInput() + '</say-as></speak>',
-                ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
-            app.ask(inputPrompt);
-        }
-    }
+restService.use(bodyParser.json());
 
+restService.post('/echo', function (req, res) {
+    const app = new ActionsSdkApp({req, res});
+    var speech = req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
+    let inputPrompt = app.buildInputPrompt(true, '<speak>Hi! <break time="1"/> ' +
+        'I can read out an ordinal like ' +
+        '<say-as interpret-as="ordinal">123</say-as>. Say a number.</speak>',
+        ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
+    app.ask(inputPrompt);
     let actionMap = new Map();
     actionMap.set(app.StandardIntents.MAIN, mainIntent);
     actionMap.set(app.StandardIntents.TEXT, rawInput);
 
     app.handleRequest(actionMap);
-    });
-}
-exports.sayNumber = sayNumber;
+});
