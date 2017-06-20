@@ -17,7 +17,7 @@
 process.env.DEBUG = 'actions-on-google:*';
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const ActionsSdkApp = require('actions-on-google');
 const restService = express();
 
 restService.use(bodyParser.urlencoded({
@@ -27,7 +27,7 @@ restService.use(bodyParser.urlencoded({
 restService.use(bodyParser.json());
 
 restService.post('/echo', function (req, res) {
-   // const app = new ActionsSdkApp({req, res});
+    const app = new ActionsSdkApp({req, res});
     //var speech = req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
     let inputPrompt = app.buildInputPrompt(true, '<speak>Hi!</speak>',
         ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
