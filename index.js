@@ -28,10 +28,8 @@ restService.use(bodyParser.json());
 
 restService.post('/echo', function (req, res) {
     const app = new ActionsSdkApp({req, res});
-    var speech = req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
-    let inputPrompt = app.buildInputPrompt(true, '<speak>Hi! <break time="1"/> ' +
-        'I can read out an ordinal like ' +
-        '<say-as interpret-as="ordinal">123</say-as>. Say a number.</speak>',
+    //var speech = req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
+    let inputPrompt = app.buildInputPrompt(true, '<speak>Hi!</speak>',
         ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
     app.ask(inputPrompt);
     let actionMap = new Map();
